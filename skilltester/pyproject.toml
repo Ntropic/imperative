@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "skilltester"
+version = "0.1.0"
+description = "Minimal async evaluator for agent skills"
+requires-python = ">=3.12,<3.14"
+dependencies = ["nooa>=0.0.7", "pydantic>=2.5"]
+
+[project.scripts]
+skilltester = "skilltester.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/skilltester"]
