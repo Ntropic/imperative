@@ -8,8 +8,9 @@ from pydantic import BaseModel
 from .models import Example, Result, Suite, Verdict
 
 
-JUDGE_SYSTEM_PROMPT = """Classify the candidate response as exactly one supplied response type.
-Reason internally and return only the structured classification."""
+JUDGE_SYSTEM_PROMPT = """Classify what the candidate actually did using the prompt and the supplied response types.
+Use the prompt to interpret the response. Do not infer completion from the request or from a promise.
+Return only the structured classification."""
 
 
 def _prompt_messages(prompt: str | list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -59,9 +60,12 @@ async def _run_one(
         ],
         output_model=Verdict,
     )
-    if not isinstance(review.content, Verdict):
+    verdict = getattr(review, "parsed", None)
+    if not isinstance(verdict, Verdict):
+        verdict = review.content
+    if not isinstance(verdict, Verdict):
         raise TypeError("judge did not return a Verdict")
-    observed = review.content.response_type
+    observed = verdict.response_type
     score = (
         suite.truth_table.get(example.expected_response_type, {}).get(
             observed,
@@ -75,7 +79,7 @@ async def _run_one(
         actual=actual,
         expected_response_type=example.expected_response_type,
         tags=example.tags,
-        verdict=review.content,
+        verdict=verdict,
         score=score,
         passed=score == 1.0,
     )

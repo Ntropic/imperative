@@ -2,42 +2,42 @@
 
 **Answer what’s asked. Change what’s requested.**
 
-Agents confuse questions with permission. Ask why; get an edit. Request one fix; get a cleanup spree.
+Imperative is a skill for coding agents.
 
-Models are trained and showcased on impressive single-shot prototypes. Incomplete prompts reward them for inferring unstated product and implementation decisions. That looks powerful in a demo, but quietly substitutes model judgment for user authorization.
+| Model | Score |
+| --- | ---: |
+| Inkling 2 Mini | 169/171 (98.8%) |
+| GPT-6.2 Sol (low reasoning) | 171/171 (100%) |
 
-Imperative minimizes that inference: questions get answers, requests grant scoped authority, and material course changes require fresh consent.
+- **Questions**
+  - Answer directly. Include a brief inline correction when it helps.
+  - Keep yes/no answers short, including questions about what the agent can do.
+- **Requests**
+  - Carry out explicit requests within the scope the user authorized.
+  - Ask for consent before departing from an agreed scope or plan.
+- **Conditional requests**
+  - Check the condition first. Carry out the requested work only if it holds.
+- **Change of mind**
+  - Apply the latest instruction to any question, request, or condition it changes. If instructions conflict, follow the last one on that point, even within one message. Stop canceled work.
 
 ## Install
 
+Run from the project where you’ll use Imperative.
+
 ```bash
-npx skills add ntropic/imperative --skill imperative
+npx skills add /path/to/imperative --skill imperative
 ```
 
-The installer detects Claude Code, Codex, Gemini CLI, GitHub Copilot, and other compatible agents. Add `--global` for all projects.
-
-## Use
-
-```text
-/imperative [request]
-```
-
-**Answers, not actions, follow from questions.** Execute only explicit requests.
+Select or mention **Imperative** in your agent. Add `--global` to install it across projects. [skills.sh directory](https://skills.sh/)
 
 ## Examples
 
-| Request | Result |
+| Prompt | Behavior |
 |---|---|
-| “Why is this failing?” | Answer. No edit. |
-| “Can you fix this?” | Answer. No edit. |
-| “Fix this.” | Fix it. |
-| “If the test fails, fix it.” | Test; fix only if failing. |
-| “What version is installed? Update it.” | Answer first; then update. |
+| “Why is this test failing?” | Explain the cause. |
+| “What would the patch look like?” | Show the patch in chat. |
+| “Fix this test.” | Apply and verify the fix. |
+| “If the test fails, fix it.” | Check first. Fix it only if it fails. |
+| “Fix it. Actually, hold off. What’s wrong?” | Explain the cause. Leave the files alone. |
 
-## Tests
-
-- Skill validation: **passed**
-- Python evaluator dry-run: **126 runs generated; 0 errors**
-- Local model evaluator retained outside Git
-
-Core skill: [`skills/imperative/SKILL.md`](skills/imperative/SKILL.md)
+[`SKILL.md`](skills/imperative/SKILL.md) · [Text evaluator and 171 test cases](skilltester/README.md)
