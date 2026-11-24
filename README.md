@@ -25,7 +25,7 @@ Imperative is a skill for coding agents.
 Run from the project where you’ll use Imperative.
 
 ```bash
-npx skills add /path/to/imperative --skill imperative
+npx skills add https://github.com/Ntropic/imperative --skill imperative
 ```
 
 Select or mention **Imperative** in your agent. Add `--global` to install it across projects. [skills.sh directory](https://skills.sh/)
